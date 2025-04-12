@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Personal Budget Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    .expense-list {
+      margin-top: 20px;
+    }
+    .expense-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: #f9fafb;
+      margin-bottom: 5px;
+      border-radius: 5px;
+    }
+    .total {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Budget Tracker</h1>
+    <label for="budget">Monthly Budget:</label>
+    <input type="number" id="budget" placeholder="Enter your monthly budget" />
+
+    <label for="desc">Expense Description:</label>
+    <input type="text" id="desc" placeholder="e.g. Groceries" />
+
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" placeholder="e.g. 50" />
+
+    <button onclick="addExpense()">Add Expense</button>
+
+    <div class="expense-list" id="expenseList"></div>
+
+    <div class="total" id="totalDisplay">Total Spent: $0</div>
+    <div class="total" id="remainingDisplay">Remaining: $0</div>
+  </div>
+
+  <script>
+    let expenses = [];
+    let monthlyBudget = 0;
+
+    function addExpense() {
+      const desc = document.getElementById('desc').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      const budgetInput = document.getElementById('budget').value;
+
+      if (budgetInput !== "") {
+        monthlyBudget = parseFloat(budgetInput);
+      }
+
+      if (!desc || isNaN(amount)) {
+        alert("Please enter valid expense details.");
+        return;
+      }
+
+      expenses.push({ desc, amount });
+      renderExpenses();
+      document.getElementById('desc').value = '';
+      document.getElementById('amount').value = '';
+    }
+
+    function renderExpenses() {
+      const list = document.getElementById('expenseList');
+      list.innerHTML = '';
+      let total = 0;
+
+      expenses.forEach(exp => {
+        total += exp.amount;
+        const item = document.createElement('div');
+        item.className = 'expense-item';
+        item.innerHTML = `<span>${exp.desc}</span><span>$${exp.amount.toFixed(2)}</span>`;
+        list.appendChild(item);
+      });
+
+      document.getElementById('totalDisplay').innerText = `Total Spent: $${total.toFixed(2)}`;
+      document.getElementById('remainingDisplay').innerText = `Remaining: $${(monthlyBudget - total).toFixed(2)}`;
+    }
+  </script>
+
+</body>
+</html>
